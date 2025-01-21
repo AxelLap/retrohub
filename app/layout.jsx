@@ -1,3 +1,4 @@
+import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { cn } from "@/lib/utils";
 import localFont from "next/font/local";
@@ -31,14 +32,16 @@ export default function RootLayout({ children }) {
           "antialiased",
           "h-full",
           "max-w-md",
-          "border",
+          "border-x",
           "m-auto",
           "bg-black",
-          "text-white"
+          "text-white",
+          "relative"
         )}
       >
         <Header />
         {children}
+        <Footer />
       </body>
     </html>
   );

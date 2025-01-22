@@ -1,16 +1,16 @@
 export const CONSTRUCTORS = [
   {
-    id: "Sega",
+    id: "sega",
     name: "Sega",
     logo: "",
   },
   {
-    id: "Nintendo",
+    id: "nintendo",
     name: "Nintendo",
     logo: "",
   },
   {
-    id: "Playstation",
+    id: "playstation",
     name: "Playstation",
     logo: "",
   },

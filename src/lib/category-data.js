@@ -1,22 +1,22 @@
 export const CATEGORIES = [
   {
     id: "console",
-    name: "console",
+    name: "Console",
     logo: "",
   },
   {
     id: "game",
-    name: "game",
+    name: "Game",
     logo: "",
   },
   {
     id: "accessory",
-    name: "accessory",
+    name: "Accessory",
     logo: "",
   },
   {
     id: "controller",
-    name: "controller",
+    name: "Controller",
     logo: "",
   },
 ];

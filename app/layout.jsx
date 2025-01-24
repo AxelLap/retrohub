@@ -27,21 +27,19 @@ export default function RootLayout({ children }) {
     <html lang="en" className="h-full">
       <body
         className={cn(
-          geistMono.variable,
-          vt323.variable,
           "antialiased",
+          vt323.variable,
+          geistMono.variable,
           "h-full",
-          "max-w-md",
-          "border-x",
-          "m-auto",
           "bg-black",
-          "text-white",
-          "relative"
+          "text-white"
         )}
       >
-        <Header />
-        {children}
-        <Footer />
+        <div className="flex flex-col min-h-full max-w-md m-auto border-x gap-2">
+          <Header />
+          <main className="py-4 px-2 flex-1">{children}</main>
+          <Footer />
+        </div>
       </body>
     </html>
   );

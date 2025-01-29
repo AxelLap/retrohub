@@ -23,7 +23,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 //DATAS
+import { Button } from "@/components/ui/button";
 import { CATEGORIES } from "@/lib/category-data";
+import { CONSTRUCTORS } from "@/lib/constructor-data";
 
 const formSchema = z.object({
   id: z.string().min(2).max(50),
@@ -44,7 +46,7 @@ function onSubmit(values) {
 
 export default function ItemIdPage() {
   return (
-    <main className="flex mt-4 flex-col gap-4 justify-center items-center font-[family-name:var(--font-geist-sans)]">
+    <main className="w-full flex mt-4 flex-col gap-4 justify-center items-center font-[family-name:var(--font-geist-sans)]">
       <div className=" flex flex-col justify-center items-center pt-10 pb-10 w-full p-4 gap-3 relative">
         <AddNewItemForm />
       </div>
@@ -65,7 +67,7 @@ const AddNewItemForm = () => {
     <Form {...form}>
       <h2 className="m-auto p-4">Add an item to sell</h2>
       <form
-        className="flex flex-col gap-4 m-auto"
+        className="flex flex-col gap-4 m-auto w-full"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <FormField
@@ -122,7 +124,7 @@ const AddNewItemForm = () => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {CATEGORIES.map((c) => (
+                  {CONSTRUCTORS.map((c) => (
                     <SelectItem
                       className="flex items-center gap-2"
                       value={c.id}
@@ -138,6 +140,9 @@ const AddNewItemForm = () => {
             </FormItem>
           )}
         />
+        <Button className="w-full text-green-700" type="submit">
+          Add Item
+        </Button>
       </form>
     </Form>
   );

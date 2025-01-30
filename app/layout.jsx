@@ -1,3 +1,4 @@
+import { AdminBtn } from "@/components/AdminBtn";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { cn } from "@/lib/utils";
@@ -32,12 +33,18 @@ export default function RootLayout({ children }) {
           geistMono.variable,
           "h-full",
           "bg-black",
-          "text-white"
+          "text-white",
+          "relative"
         )}
       >
+        <AdminBtn />
         <div className="flex flex-col min-h-full max-w-md m-auto border-x gap-2">
           <Header />
-          <main className="py-4 px-2 flex-1">{children}</main>
+          <main className="py-1 px-2 flex-1">
+            <div className="flex flex-col gap-4 justify-center items-center font-[family-name:var(--font-geist-sans)]">
+              {children}
+            </div>
+          </main>
           <Footer />
         </div>
       </body>

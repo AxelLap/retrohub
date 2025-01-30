@@ -11,8 +11,8 @@ export default function Login() {
   const router = useRouter();
 
   return (
-    <div className="flex flex-col gap-4 h-full w-full">
-      <div className="absolute top-0 -left-10 -rotate-6">
+    <div className="flex flex-col gap-4 h-full w-full relative p-7">
+      <div className="absolute top-0 left-0 -rotate-6">
         <Image
           src="/assets/snes_controller_logo.png"
           alt="logo"
@@ -20,7 +20,7 @@ export default function Login() {
           width={90}
         />
       </div>
-      <div className="absolute -bottom-8 -left-10 -rotate-6">
+      <div className="absolute -bottom-[3.5rem] left-0 -rotate-6">
         <Image
           src="/assets/PS1_ctrlr-logo-removebg-preview.png"
           alt="logo"
@@ -28,7 +28,7 @@ export default function Login() {
           width={70}
         />
       </div>
-      <div className="absolute top-0 -right-10 rotate-6">
+      <div className="absolute top-0 right-2 rotate-6">
         <Image
           src="/assets/dreamcast_ctrlr_logo.png"
           alt="logo"
@@ -36,7 +36,7 @@ export default function Login() {
           width={50}
         />
       </div>
-      <div className="absolute -bottom-8 -right-10 rotate-6">
+      <div className="absolute -bottom-[3.5rem] right-0 rotate-6">
         <Image
           src="/assets/nes_ctrlr_logo.png"
           alt="logo"
@@ -44,20 +44,21 @@ export default function Login() {
           width={100}
         />
       </div>
-
-      <h2 className="text-2xl">Welcome to RetroHub</h2>
-      <p>Please login to access the shop !</p>
-      <form
-        action={(formData) => {
-          const userName = formData.get("userName");
-          login(userName);
-          router.push("/");
-        }}
-        className="flex w-full gap-4"
-      >
-        <Input placeholder="Enter your name" name="userName"></Input>
-        <Button type="submit">login</Button>
-      </form>
+      <div className="flex flex-col gap-4 w-3/4 h-fit m-auto items-center">
+        <h2 className="text-2xl">Welcome to RetroHub</h2>
+        <p>Please login to access the shop !</p>
+        <form
+          action={(formData) => {
+            const userName = formData.get("userName");
+            login(userName);
+            router.push("/");
+          }}
+          className="flex w-full gap-4"
+        >
+          <Input placeholder="Enter your name" name="userName"></Input>
+          <Button type="submit">login</Button>
+        </form>
+      </div>
     </div>
   );
 }

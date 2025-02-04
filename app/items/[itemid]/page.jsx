@@ -28,14 +28,16 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { CATEGORIES } from "@/lib/category-data";
 import { CONSTRUCTORS } from "@/lib/constructor-data";
 import { getId } from "@/lib/get-id";
+import { setItem } from "@/lib/set-item";
 import { useUserStore } from "@/lib/store/use-user-store";
 import Link from "next/link";
 
 const formSchema = z.object({
-  id: z.string().min(2).max(50),
   name: z.string().min(2).max(50),
   category: z.string().min(2).max(50),
   constr: z.string().min(2).max(50),
+  price: z.coerce.number(),
+  image: z.any(),
 });
 
 export default function ItemIdPage() {
@@ -70,15 +72,19 @@ const AddNewItemForm = () => {
       name: "",
       category: "",
       constr: "",
+      price: 0,
     },
   });
 
   function onSubmit(values) {
+    console.log("submiting...");
     const id = getId(values.name);
-    console.log(id, {
+    setItem(id, {
       name: values.name,
       category: values.category,
       constr: values.constr,
+      price: values.price,
+      image: values.image,
     });
   }
 
@@ -88,7 +94,10 @@ const AddNewItemForm = () => {
       <Form {...form}>
         <form
           className="flex flex-col gap-4 m-auto w-full"
-          onSubmit={form.handleSubmit((values) => onSubmit(values))}
+          onSubmit={form.handleSubmit(
+            (values) => onSubmit(values),
+            (errors) => console.log("❌ Erreurs de validation :", errors)
+          )}
         >
           <FormField
             control={form.control}
@@ -173,7 +182,11 @@ const AddNewItemForm = () => {
               <FormItem>
                 <FormLabel>Price</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter item's price" type="number"></Input>
+                  <Input
+                    placeholder="Enter item's price"
+                    type="number"
+                    {...field}
+                  />
                 </FormControl>
               </FormItem>
             )}
@@ -185,10 +198,7 @@ const AddNewItemForm = () => {
               <FormItem>
                 <FormLabel>Image</FormLabel>
                 <FormControl>
-                  <ImageInput
-                    image={field.value}
-                    onChange={field.onChange}
-                  ></ImageInput>
+                  <ImageInput image={field.value} onChange={field.onChange} />
                 </FormControl>
               </FormItem>
             )}

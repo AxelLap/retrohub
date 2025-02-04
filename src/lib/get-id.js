@@ -1,5 +1,6 @@
 export const getId = (itemName) => {
-  const date = Date.now();
-  const itemId = `${date}_${itemName}`;
+  console.log("getId is called");
+  const itemId = Date.now();
+
   return itemId;
 };

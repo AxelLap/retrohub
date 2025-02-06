@@ -15,14 +15,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-//UI Components
 
-//Hooks
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-//DATAS
 import { ImageInput } from "@/components/ImageInput";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { CATEGORIES } from "@/lib/category-data";
@@ -30,6 +30,7 @@ import { CONSTRUCTORS } from "@/lib/constructor-data";
 import { getId } from "@/lib/get-id";
 import { setItem } from "@/lib/set-item";
 import { useUserStore } from "@/lib/store/use-user-store";
+import { Loader } from "lucide-react";
 import Link from "next/link";
 
 const formSchema = z.object({
@@ -42,6 +43,8 @@ const formSchema = z.object({
 
 export default function ItemIdPage() {
   const isAdmin = useUserStore((s) => s.isAdmin);
+  const [isLoading, setIsLoading] = useState(false);
+
   if (!isAdmin) {
     return (
       <div className=" flex flex-col justify-center items-center w-full px-4 gap-3 ">
@@ -58,6 +61,16 @@ export default function ItemIdPage() {
       </div>
     );
   }
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col gap-4 w-full h-full justify-center items-center m-10">
+        <Loader className="animate-spin" />
+        <span className="font-bold">Loading...</span>
+      </div>
+    );
+  }
+
   return (
     <div className=" flex flex-col justify-center items-center w-full px-4 gap-3 ">
       <AddNewItemForm />
@@ -66,6 +79,8 @@ export default function ItemIdPage() {
 }
 
 const AddNewItemForm = () => {
+  const router = useRouter();
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -77,7 +92,6 @@ const AddNewItemForm = () => {
   });
 
   function onSubmit(values) {
-    console.log("submiting...");
     const id = getId(values.name);
     setItem(id, {
       name: values.name,
@@ -86,6 +100,7 @@ const AddNewItemForm = () => {
       price: values.price,
       image: values.image,
     });
+    router.push("/");
   }
 
   return (

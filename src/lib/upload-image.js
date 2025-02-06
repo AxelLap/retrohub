@@ -1,33 +1,53 @@
+import { getS3Client } from "./auth.js";
 import { supabase } from "./supabase";
 
 export const uploadImage = async (id, item) => {
   console.log("uploadImage is called");
 
-  // Vérification du type de l'image
   if (!(item.image instanceof File)) {
     console.error("L'image n'est pas un objet File");
     return;
   }
 
-  console.log("item.image", item.image);
-  const fileExt = item.image.name.split(".").pop(); // Récupère l'extension
-
-  const fileName = `${id}.${fileExt}`; // Génère un nom correct
-  console.log("File Name:", fileName);
-
-  // Upload de l'image sur Supabase Storage
-  const { data, error } = await supabase.storage
-    .from("items")
-    .upload(fileName, item.image);
-
-  if (error) {
-    console.error("Upload failed:", error);
+  // Obtenir le client S3 avec l'authentification correcte
+  let s3Client;
+  try {
+    s3Client = await getS3Client();
+  } catch (error) {
+    console.error("Erreur lors de l'initialisation du client S3:", error);
     return;
   }
 
-  // Vérification de l'URL publique
-  const publicUrl = supabase.storage.from("items").getPublicUrl(fileName);
-  console.log("Generated Public URL:", publicUrl.data.publicUrl);
+  console.log("Utilisateur authentifié avec S3Client");
 
-  return publicUrl.data.publicUrl;
+  const fileExt = item.image.name.split(".").pop();
+  const fileName = `${id}.${fileExt}`;
+  console.log("File Name:", fileName);
+
+  // Upload de l'image avec le client S3 correctement configuré
+  const { data, error } = await supabase.storage
+    .from("items")
+    .upload(fileName, item.image, {
+      cacheControl: "3600", // Gérer le cache (optionnel)
+      upsert: true, // Remplace le fichier s'il existe
+      contentType: item.image.type, // Ajoute le bon type MIME
+    });
+
+  if (error) {
+    console.error("Échec de l'upload :", error);
+    return;
+  }
+
+  if (error) {
+    console.error("Upload échoué:", error);
+    return;
+  }
+
+  // Obtenir l'URL publique
+  const { data: publicData } = supabase.storage
+    .from("items")
+    .getPublicUrl(fileName);
+  console.log("Generated Public URL:", publicData.publicUrl);
+
+  return publicData.publicUrl;
 };

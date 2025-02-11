@@ -1,4 +1,5 @@
 "use client";
+import { ItemList } from "@/components/ItemList";
 import { useUserStore } from "@/lib/store/use-user-store";
 import { useRouter } from "next/navigation";
 import Login from "./login/page";
@@ -15,6 +16,7 @@ export default function Home() {
   }
   return (
     <>
+      <ItemList />
       <p>Welcome to the shop !</p>
     </>
   );

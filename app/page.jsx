@@ -16,8 +16,8 @@ export default function Home() {
   }
   return (
     <>
-      <ItemList />
       <p>Welcome to the shop !</p>
+      <ItemList />
     </>
   );
 }

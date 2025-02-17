@@ -26,7 +26,7 @@ import { z } from "zod";
 import { ImageInput } from "@/components/ImageInput";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { CATEGORIES } from "@/lib/category-data";
-import { CONSTRUCTORS } from "@/lib/constructor-data";
+import { CONSTR } from "@/lib/constructor-data";
 import { getId } from "@/lib/get-id";
 import { setItem } from "@/lib/set-item";
 import { useUserStore } from "@/lib/store/use-user-store";
@@ -174,7 +174,7 @@ const AddNewItemForm = () => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {CONSTRUCTORS.map((c) => (
+                    {CONSTR.map((c) => (
                       <SelectItem
                         className="flex items-center gap-2"
                         value={c.id}

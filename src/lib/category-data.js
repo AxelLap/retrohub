@@ -1,22 +1,26 @@
 export const CATEGORIES = [
   {
     id: "console",
-    name: "Console",
-    logo: "",
+    name: "Consoles",
+    logo: "/assets/console_logo.png",
+    type: "cat",
   },
   {
     id: "game",
-    name: "Game",
-    logo: "",
+    name: "Games",
+    logo: "/assets/game_logo.png",
+    type: "cat",
   },
   {
     id: "accessory",
-    name: "Accessory",
-    logo: "",
+    name: "Accessories",
+    logo: "/assets/accessory_logo.png",
+    type: "cat",
   },
   {
     id: "controller",
-    name: "Controller",
-    logo: "",
+    name: "Controllers",
+    logo: "/assets/controller_logo.png",
+    type: "cat",
   },
 ];

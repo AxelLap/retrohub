@@ -1,18 +1,26 @@
 import { getItems } from "@/lib/get-items";
+import { useFilterStore } from "@/lib/store/use-filter-store";
 import { Loader } from "lucide-react";
 import useSWR from "swr";
 import { CardItem } from "./CardItem";
 
 export const ItemList = () => {
-  const { data, isLoading } = useSWR("/", async () => {
-    return getItems();
-  });
+  const { catFilter, constrFilter } = useFilterStore();
+  const { data, isLoading } = useSWR(
+    ["/", catFilter, constrFilter],
+    async () => {
+      return getItems(catFilter, constrFilter);
+    }
+  );
 
   if (isLoading) {
     return <Loader className="animate-spin" />;
   }
 
   const items = data.items;
+
+  console.log(items);
+  console.log(catFilter);
 
   return (
     <div className="h-full w-full flex flex-col gap-3">

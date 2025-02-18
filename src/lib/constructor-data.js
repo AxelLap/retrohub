@@ -2,25 +2,25 @@ export const CONSTR = [
   {
     id: "sega",
     name: "Sega",
-    logo: "",
+    logo: "/assets/constr_logo_sega.png",
     type: "constr",
   },
   {
     id: "nintendo",
     name: "Nintendo",
-    logo: "",
+    logo: "/assets/constr_logo_nintendo.png",
     type: "constr",
   },
   {
-    id: "playstation",
-    name: "Playstation",
-    logo: "",
+    id: "sony",
+    name: "Sony",
+    logo: "/assets/constr_logo_sony.png",
     type: "constr",
   },
   {
     id: "x-box",
     name: "x-box",
-    logo: "",
+    logo: "/assets/constr_logo_xbox.png",
     type: "constr",
   },
 ];

@@ -30,8 +30,8 @@ export default function Home() {
     <>
       <p>Welcome to the shop !</p>
       <div
-        className={`bg-gray-800 w-full overflow-hidden rounded-md p-1 text-white transition-all duration-300 ${
-          isFiltersMenuOpen ? "h-[250px]" : "h-[25px]"
+        className={`flex flex-col bg-gray-800 w-full overflow-hidden rounded-md px-1 text-white transition-all duration-300 ${
+          isFiltersMenuOpen ? "h-[250px]" : "h-[22px]"
         }`}
       >
         <div className="w-full flex h-fit">
@@ -43,8 +43,10 @@ export default function Home() {
             onClick={toggleFilterMenu}
           />
         </div>
-        <FilterList list={CATEGORIES} />
-        <FilterList list={CONSTR} />
+        <div className="flex flex-col gap-4 h-[125px] mt-1">
+          <FilterList list={CATEGORIES} />
+          <FilterList list={CONSTR} />
+        </div>
       </div>
       <ItemList />
     </>

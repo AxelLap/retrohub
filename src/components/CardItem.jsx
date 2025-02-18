@@ -9,6 +9,7 @@ import {
 import { formatPrice } from "@/lib/formatPrice";
 
 import { User } from "lucide-react";
+import { AddToCartButton } from "./AddToCartBtn";
 import { Button } from "./ui/button";
 
 export const CardItem = ({ item }) => {
@@ -47,9 +48,7 @@ export const CardItem = ({ item }) => {
         <Button className="w-1/4 hover:bg-white hover:text-black m-auto">
           Description
         </Button>
-        <Button className="w-1/3 hover:bg-white hover:text-black m-auto">
-          Add to cart
-        </Button>
+        <AddToCartButton item={item} />
       </CardFooter>
     </Card>
   );

@@ -25,7 +25,9 @@ import { z } from "zod";
 
 import { ImageInput } from "@/components/ImageInput";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { CATEGORIES } from "@/lib/category-data";
+import { CONDITIONS } from "@/lib/condition-data";
 import { CONSTR } from "@/lib/constructor-data";
 import { getId } from "@/lib/get-id";
 import { setItem } from "@/lib/set-item";
@@ -35,22 +37,25 @@ import Link from "next/link";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
+  description: z.string().min(0).max(500),
   category: z.string().min(2).max(50),
   constr: z.string().min(2).max(50),
+  condition: z.string().min(2).max(50),
   price: z.coerce.number(),
   image: z.any(),
+  userId: z.string(),
 });
 
 export default function ItemIdPage() {
-  const isAdmin = useUserStore((s) => s.isAdmin);
+  const userName = useUserStore((s) => s.user);
   const [isLoading, setIsLoading] = useState(false);
 
-  if (!isAdmin) {
+  if (!userName) {
     return (
       <div className=" flex flex-col justify-center items-center w-full px-4 gap-3 ">
         <p className="text-red-500 text-center">
-          This page is restricted to admin only please login with an admin
-          acount
+          This page is restricted to logged users only please login to your
+          account first
         </p>
         <Link
           className={buttonVariants({ size: "sm", variant: "secondary" })}
@@ -79,15 +84,21 @@ export default function ItemIdPage() {
 }
 
 const AddNewItemForm = () => {
+  const userId = useUserStore((s) => s.user);
+  console.log(userId);
+
   const router = useRouter();
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      description: "",
       category: "",
       constr: "",
+      condition: "",
       price: 0,
+      userId: "",
     },
   });
 
@@ -95,10 +106,13 @@ const AddNewItemForm = () => {
     const id = getId(values.name);
     setItem(id, {
       name: values.name,
+      description: values.description,
       category: values.category,
       constr: values.constr,
+      condition: values.condition,
       price: values.price,
       image: values.image,
+      userId: userId,
     });
     router.push("/");
   }
@@ -122,6 +136,18 @@ const AddNewItemForm = () => {
                 <FormLabel>Name</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter item's name" {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Textarea placeholder="Enter item's description" {...field} />
                 </FormControl>
               </FormItem>
             )}
@@ -182,6 +208,45 @@ const AddNewItemForm = () => {
                       >
                         <div className="flex items-center gap-2">
                           <p>{c.name}</p>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="condition"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>condition</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a condition" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem
+                      value="select a condition"
+                      disabled
+                      className="text-gray-400"
+                    >
+                      Select a condition
+                    </SelectItem>
+                    {CONDITIONS.map((c) => (
+                      <SelectItem
+                        className="flex items-center gap-2"
+                        value={c}
+                        key={c}
+                      >
+                        <div className="flex items-center gap-2">
+                          <p>{c}</p>
                         </div>
                       </SelectItem>
                     ))}

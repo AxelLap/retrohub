@@ -1,12 +1,6 @@
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+"use client";
 
-import { formatPrice } from "@/lib/formatPrice";
+import { Card, CardFooter } from "@/components/ui/card";
 
 import { User } from "lucide-react";
 import { AddToCartButton } from "./AddToCartBtn";
@@ -14,41 +8,27 @@ import { Button } from "./ui/button";
 
 export const CardItem = ({ item }) => {
   return (
-    <Card>
-      <CardHeader className="rounded-xl space-y-0.5 p-1">
-        <CardTitle className="m-auto">
-          <h3 className="text-xl">{item.name}</h3>
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="flex w-full p-1 justify-center items-center h-[200px]">
+    <Card className="w-[48%] h-[250px]">
+      <div className="flex w-full h-2/3 justify-center items-center ">
         <img
           src={item.image}
           alt={item.name}
-          className="rounded-lg border shadow-inner w-2/3 max-h-full object-contain"
+          className=" shadow-inner w-full max-h-full object-cover rounded-t-xl"
         />
-        <div className="flex flex-col gap-2 h-full w-fit m-auto pl-1  justify-center">
-          <span className="font-bold">category</span>
-          <p className="pl-5">{item.category}</p>
-
-          <span className="font-bold">constructor</span>
-          <p className="pl-5">{item.constr}</p>
-
-          <span className="font-bold">price</span>
-          <span className="pl-5">{formatPrice(item.price)}</span>
-        </div>
-      </CardContent>
-      <CardFooter className="flex  rounded-xl p-0 h-fit">
-        <div className="flex h-full w-fit gap-3 m-2 items-center">
-          <p>Vendor:</p>
+      </div>
+      <CardFooter className="flex justify-center items-center gap-2  rounded-xl p-0 h-1/3">
+        <div className="flex h-full w-fit gap-3 items-center">
           <div className="flex flex-col items-center">
             <User className="border border-black rounded-full" size={35} />
             <span className="text-sm">User</span>
           </div>
         </div>
-        <Button className="w-1/4 hover:bg-white hover:text-black m-auto">
-          Description
-        </Button>
-        <AddToCartButton item={item} />
+        <div className="w-2/3 flex flex-col gap-2">
+          <Button className="w-full hover:bg-white hover:text-black m-auto">
+            Description
+          </Button>
+          <AddToCartButton item={item} />
+        </div>
       </CardFooter>
     </Card>
   );

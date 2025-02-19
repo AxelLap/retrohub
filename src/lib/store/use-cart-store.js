@@ -1,44 +1,36 @@
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 
-export const useCartStore = create((set) => ({
-  items: {},
-  addItem: (newItem) => {
-    set((state) => {
-      const itemId = newItem.id;
-      if (state.items[itemId]) {
-        state.items[itemId] = {
-          quantity: state.items[itemId].quantity + 1,
-          newItem,
-        };
-      } else {
-        state.items[itemId] = {
-          quantity: 1,
-          newItem,
-        };
-      }
+export const useCartStore = create(
+  persist(
+    (set, get) => ({
+      items: {},
 
-      return {
-        items: { ...state.items },
-      };
-    });
-  },
-  removeItem: (item) => {
-    set((state) => {
-      const itemId = item.id;
-      if (!state.items[itemId]) {
-        return {};
-      }
-      state.items[itemId] = {
-        quantity: state.items[itemId].quantity - 1,
-        item,
-      };
+      addItem: (newItem) => {
+        set((state) => ({
+          items: { ...state.items, [newItem.id]: newItem },
+        }));
+      },
 
-      if (state.items[itemId].quantity <= 0) {
-        delete state.items[itemId];
-      }
-      return {
-        items: { ...state.items },
-      };
-    });
-  },
-}));
+      removeItem: (item) => {
+        set((state) => {
+          const updatedItems = { ...state.items };
+          delete updatedItems[item.id];
+          return { items: updatedItems };
+        });
+      },
+
+      countItems: () => Object.keys(get().items).length,
+
+      calculateCartPrice: () =>
+        Object.values(get().items).reduce(
+          (total, item) => total + item.price,
+          0
+        ),
+    }),
+    {
+      name: "cart-items",
+      storage: createJSONStorage(() => localStorage), // Utilise localStorage uniquement côté client
+    }
+  )
+);

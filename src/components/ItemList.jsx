@@ -1,3 +1,5 @@
+"use client";
+
 import { getItems } from "@/lib/get-items";
 import { useFilterStore } from "@/lib/store/use-filter-store";
 import { Loader } from "lucide-react";
@@ -20,10 +22,9 @@ export const ItemList = () => {
   const items = data.items;
 
   console.log(items);
-  console.log(catFilter);
 
   return (
-    <div className="h-full w-full flex flex-col gap-3">
+    <div className="h-full w-full flex gap-3 justify-center flex-wrap ">
       {items.map((i) => (
         <CardItem key={i.id} item={i} />
       ))}

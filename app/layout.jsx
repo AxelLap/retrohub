@@ -38,7 +38,7 @@ export default function RootLayout({ children }) {
         )}
       >
         <AdminBtn />
-        <div className="flex flex-col min-h-full max-w-md m-auto border-x gap-2">
+        <div className="flex flex-col min-h-full max-w-md m-auto gap-2">
           <Header />
           <main className="py-1 px-2 flex-1">
             <div className="flex flex-col gap-4 justify-center items-center font-[family-name:var(--font-geist-sans)]">

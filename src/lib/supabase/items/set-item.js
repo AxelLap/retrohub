@@ -13,6 +13,7 @@ export const setItem = async (id, item) => {
     price: item.price * 100,
     image: imageUrl,
     userId: item.userId,
+    userImage: item.userImage,
   };
 
   console.log("🛠 Données envoyées à Supabase:", newItem);

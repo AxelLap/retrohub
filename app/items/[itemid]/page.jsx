@@ -23,7 +23,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { ImageInput } from "@/components/ImageInput";
+import { AnimatedLoader } from "@/components/animations/AnimatedLoader";
+import { ImageInput } from "@/components/forms&inputs/ImageInput";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { CATEGORIES } from "@/lib/data/category-data";
@@ -32,7 +33,6 @@ import { CONSTR } from "@/lib/data/constructor-data";
 import { useUserStore } from "@/lib/store/use-user-store";
 import { setItem } from "@/lib/supabase/items/set-item";
 import { getId } from "@/lib/tools/get-id";
-import { Loader } from "lucide-react";
 import Link from "next/link";
 
 const formSchema = z.object({
@@ -44,6 +44,7 @@ const formSchema = z.object({
   price: z.coerce.number(),
   image: z.any(),
   userId: z.string(),
+  userImage: z.string(),
 });
 
 export default function ItemIdPage() {
@@ -68,12 +69,7 @@ export default function ItemIdPage() {
   }
 
   if (isLoading) {
-    return (
-      <div className="flex flex-col gap-4 w-full h-full justify-center items-center m-10">
-        <Loader className="animate-spin" />
-        <span className="font-bold">Loading...</span>
-      </div>
-    );
+    return <AnimatedLoader />;
   }
 
   return (
@@ -85,6 +81,7 @@ export default function ItemIdPage() {
 
 const AddNewItemForm = () => {
   const userId = useUserStore((s) => s.user);
+  const userImage = useUserStore((s) => s.userImage);
   console.log(userId);
 
   const router = useRouter();
@@ -99,11 +96,12 @@ const AddNewItemForm = () => {
       condition: "",
       price: 0,
       userId: "",
+      userImage: "",
     },
   });
 
   function onSubmit(values) {
-    const id = getId(values.name);
+    const id = getId();
     setItem(id, {
       name: values.name,
       description: values.description,
@@ -113,6 +111,7 @@ const AddNewItemForm = () => {
       price: values.price,
       image: values.image,
       userId: userId,
+      userImage: userImage,
     });
     router.push("/");
   }

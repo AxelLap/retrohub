@@ -1,7 +1,7 @@
 "use client";
 
-import { getItems } from "@/lib/get-items";
 import { useFilterStore } from "@/lib/store/use-filter-store";
+import { getItems } from "@/lib/supabase/items/get-items";
 import { Loader } from "lucide-react";
 import useSWR from "swr";
 import { CardItem } from "./CardItem";

@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import Login from "./login/page";
 
 import { FilterButton } from "@/components/FilterBtn";
-import { CATEGORIES } from "@/lib/category-data";
-import { CONSTR } from "@/lib/constructor-data";
+import { CATEGORIES } from "@/lib/data/category-data";
+import { CONSTR } from "@/lib/data/constructor-data";
 import { useFilterStore } from "@/lib/store/use-filter-store";
 import { ChevronDown } from "lucide-react";
 

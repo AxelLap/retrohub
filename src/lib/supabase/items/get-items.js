@@ -1,4 +1,4 @@
-import { supabase } from "./supabase";
+import { supabase } from "../supabase";
 export const getItems = async (catFilter, constrFilter) => {
   let query = supabase.from("items").select("*");
 

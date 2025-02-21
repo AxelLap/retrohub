@@ -2,7 +2,7 @@
 
 import { Card, CardFooter } from "@/components/ui/card";
 
-import { formatPrice } from "@/lib/formatPrice";
+import { formatPrice } from "@/lib/tools/formatPrice";
 import { User } from "lucide-react";
 import { AddToCartButton } from "./AddToCartBtn";
 import { Button } from "./ui/button";

@@ -1,5 +1,5 @@
 import { getS3Client } from "./auth.js";
-import { supabase } from "./supabase";
+import { supabase } from "./supabase.js";
 
 export const uploadImage = async (id, item) => {
   console.log("uploadImage is called");

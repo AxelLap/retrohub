@@ -26,12 +26,12 @@ import { z } from "zod";
 import { ImageInput } from "@/components/ImageInput";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { CATEGORIES } from "@/lib/category-data";
-import { CONDITIONS } from "@/lib/condition-data";
-import { CONSTR } from "@/lib/constructor-data";
-import { getId } from "@/lib/get-id";
-import { setItem } from "@/lib/set-item";
+import { CATEGORIES } from "@/lib/data/category-data";
+import { CONDITIONS } from "@/lib/data/condition-data";
+import { CONSTR } from "@/lib/data/constructor-data";
 import { useUserStore } from "@/lib/store/use-user-store";
+import { setItem } from "@/lib/supabase/items/set-item";
+import { getId } from "@/lib/tools/get-id";
 import { Loader } from "lucide-react";
 import Link from "next/link";
 

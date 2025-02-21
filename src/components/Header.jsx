@@ -1,8 +1,8 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { formatPrice } from "@/lib/formatPrice";
 import { useCartStore } from "@/lib/store/use-cart-store";
 import { useUserStore } from "@/lib/store/use-user-store";
+import { formatPrice } from "@/lib/tools/formatPrice";
 import { ShoppingBasket, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";

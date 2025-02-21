@@ -2,7 +2,7 @@
 
 import { useCartStore } from "@/lib/store/use-cart-store";
 import { Trash2 } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 
 export const AddToCartButton = ({ item }) => {
   const itemId = item.id;

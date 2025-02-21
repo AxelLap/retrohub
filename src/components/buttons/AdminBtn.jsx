@@ -2,7 +2,7 @@
 
 import { useUserStore } from "@/lib/store/use-user-store";
 import Link from "next/link";
-import { buttonVariants } from "./ui/button";
+import { buttonVariants } from "../ui/button";
 
 export const AdminBtn = () => {
   const isAdmin = useUserStore((s) => s.isAdmin);

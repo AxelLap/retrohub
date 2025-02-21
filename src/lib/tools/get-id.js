@@ -1,6 +1,6 @@
-export const getId = (itemName) => {
+export const getId = () => {
   console.log("getId is called");
-  const itemId = Date.now();
+  const id = Date.now();
 
-  return itemId;
+  return id;
 };

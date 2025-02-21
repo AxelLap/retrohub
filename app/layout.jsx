@@ -1,6 +1,6 @@
-import { AdminBtn } from "@/components/AdminBtn";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
+import { AdminBtn } from "@/components/buttons/AdminBtn";
+import { Footer } from "@/components/sections/Footer";
+import { Header } from "@/components/sections/Header";
 import { cn } from "@/lib/utils";
 import localFont from "next/font/local";
 import "./globals.css";

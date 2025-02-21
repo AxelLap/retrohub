@@ -1,14 +1,37 @@
 "use client";
 
+import { SignInForm } from "@/components/forms&inputs/signInForm";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useUserStore } from "@/lib/store/use-user-store";
+import { getUser } from "@/lib/supabase/users/get-user"; // Import de la fonction BDD
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function Login() {
-  const login = useUserStore((state) => state.login);
+  const { login } = useUserStore();
   const router = useRouter();
+  const [loginMode, setLoginMode] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  async function handleLogin(formData) {
+    setErrorMessage(""); // Réinitialise les erreurs
+    const userName = formData.get("userName");
+
+    // Vérifie si l'utilisateur existe dans la BDD
+    const { user } = await getUser(userName);
+
+    if (user && user.length > 0) {
+      // Utilisateur trouvé, on l'ajoute au store avec son image
+      login(user[0].userName, user[0].image);
+      router.push("/");
+    } else {
+      // Utilisateur introuvable, retour au mode inscription
+      setLoginMode(false);
+      setErrorMessage("User not found. Please sign up.");
+    }
+  }
 
   return (
     <div className="flex flex-col gap-4 h-full w-full relative p-7">
@@ -46,18 +69,22 @@ export default function Login() {
       </div>
       <div className="flex flex-col gap-4 w-3/4 h-fit m-auto items-center">
         <h2 className="text-2xl">Welcome to RetroHub</h2>
-        <p>Please login to access the shop !</p>
-        <form
-          action={(formData) => {
-            const userName = formData.get("userName");
-            login(userName);
-            router.push("/");
-          }}
-          className="flex w-full gap-4"
-        >
-          <Input placeholder="Enter your name" name="userName"></Input>
-          <Button type="submit">login</Button>
-        </form>
+        {loginMode ? (
+          <div className="flex flex-col gap-7">
+            <p className="text-center">Please login to access the shop!</p>
+            {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+            <form action={handleLogin} className="flex w-full gap-4">
+              <Input placeholder="Enter your name" name="userName"></Input>
+              <Button type="submit">Login</Button>
+            </form>
+            <div className="flex flex-col gap-2">
+              <p className="text-center">Don't have an account yet?</p>
+              <Button onClick={() => setLoginMode(false)}>Sign up</Button>
+            </div>
+          </div>
+        ) : (
+          <SignInForm />
+        )}
       </div>
     </div>
   );

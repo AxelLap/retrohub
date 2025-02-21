@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 
 export const ImageInput = ({ currentImage, onChange }) => {
   const [imagePreview, setImagePreview] = useState(currentImage);

@@ -18,8 +18,8 @@ export const CONSTR = [
     type: "constr",
   },
   {
-    id: "x-box",
-    name: "x-box",
+    id: "microsoft",
+    name: "microsoft",
     logo: "/assets/constr_logo_xbox.png",
     type: "constr",
   },

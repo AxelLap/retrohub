@@ -1,6 +1,6 @@
 import { useFilterStore } from "@/lib/store/use-filter-store";
 
-const { Button } = require("./ui/button");
+const { Button } = require("../ui/button");
 
 export const FilterButton = ({ filter }) => {
   const { catFilter, constrFilter, setCatFilter, setConstrFilter } =

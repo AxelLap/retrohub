@@ -9,7 +9,7 @@ import { Button } from "../ui/button";
 
 export const CardItem = ({ item }) => {
   const price = item.price;
-  console.log(item.userId);
+
   return (
     <Card className="w-[48%] h-[250px]">
       <div className="flex w-full h-2/3 justify-center items-center relative">

@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/lib/store/use-cart-store";
+import { useDialogStore } from "@/lib/store/use-user-dialog-store";
 import { useUserStore } from "@/lib/store/use-user-store";
 import { getUser } from "@/lib/supabase/users/get-user";
 import { formatPrice } from "@/lib/tools/formatPrice";
@@ -8,7 +9,6 @@ import { ShoppingBasket } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { AnimatedLoader } from "../animations/AnimatedLoader";
 
 export const Header = () => {
   const [isHydrated, setIsHydrated] = useState(false);
@@ -60,6 +60,8 @@ const UserHeader = () => {
   const userName = useUserStore((state) => state.user);
   const [userData, setUserData] = useState(null);
 
+  const setIsDialogOpen = useDialogStore((state) => state.setIsDialogOpen);
+
   useEffect(() => {
     if (!userName) return;
 
@@ -71,10 +73,12 @@ const UserHeader = () => {
     fetchUser(); // 👈 On exécute la fonction une seule fois au mount
   }, [userName]); // 👈 Exécute seulement si userName change
 
-  if (!userData) return <AnimatedLoader />;
-
+  if (!userData) return null;
   return (
-    <button className="flex w-fit gap-2 items-center hover:cursor-pointer">
+    <button
+      className="flex w-fit gap-2 items-center cursor-pointer"
+      onClick={setIsDialogOpen}
+    >
       <span>{userName}</span>
       <img
         src={userData[0].image}

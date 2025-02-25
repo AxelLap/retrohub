@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation";
 import Login from "./login/page";
 
 import { FilterButton } from "@/components/buttons/FilterBtn";
+import { UserDialog } from "@/components/home_features/UserDialog";
 import { CATEGORIES } from "@/lib/data/category-data";
 import { CONSTR } from "@/lib/data/constructor-data";
 import { useFilterStore } from "@/lib/store/use-filter-store";
+import { useDialogStore } from "@/lib/store/use-user-dialog-store";
 import { ChevronDown } from "lucide-react";
 
 export default function Home() {
@@ -22,13 +24,15 @@ export default function Home() {
     catFilter,
   } = useFilterStore();
 
+  const { isDialogOpen } = useDialogStore();
+
   if (!userName) {
     return <Login />;
   }
-  console.log(catFilter);
+
   return (
-    <>
-      <p>Welcome to the shop !</p>
+    <div className="flex flex-col gap-3 relative">
+      <p className="m-auto">Welcome to the shop !</p>
       <div
         className={`flex flex-col bg-gray-800 w-full overflow-hidden rounded-md px-1 text-white transition-all duration-300 ${
           isFiltersMenuOpen ? "h-[250px]" : "h-[22px]"
@@ -49,7 +53,8 @@ export default function Home() {
         </div>
       </div>
       <ItemList />
-    </>
+      {isDialogOpen ? <UserDialog /> : null}
+    </div>
   );
 }
 

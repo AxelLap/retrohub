@@ -15,4 +15,5 @@ export const setUser = async (id, user) => {
   if (error) {
     console.log("insert error");
   }
+  return newUser;
 };

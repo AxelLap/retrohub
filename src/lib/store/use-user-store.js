@@ -6,10 +6,10 @@ export const useUserStore = create(
     (set) => ({
       user: null,
       userImage: null, // On stocke l'image de profil
-      isAdmin: false,
+
       login: (newUser, userImage) =>
-        set({ user: newUser, userImage, isAdmin: newUser === "admin" }),
-      logout: () => set({ user: "", userImage: null, isAdmin: false }),
+        set({ user: newUser, userImage: userImage }),
+      logout: () => set({ user: "", userImage: null }),
     }),
     { name: "userStore" }
   )

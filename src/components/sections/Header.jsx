@@ -74,16 +74,25 @@ const UserHeader = () => {
   }, [userName]); // 👈 Exécute seulement si userName change
 
   if (!userData) return null;
+  console.log(userData);
+
+  const userImage = userData[0].image;
+
   return (
     <button
       className="flex w-fit gap-2 items-center cursor-pointer"
       onClick={setIsDialogOpen}
     >
       <span>{userName}</span>
-      <img
-        src={userData[0].image}
-        className="w-[60px] h-[60px] rounded-full object-cover"
-      />
+
+      {userImage === null ? (
+        <User />
+      ) : (
+        <img
+          src={userData[0].image}
+          className="w-[60px] h-[60px] rounded-full object-cover"
+        />
+      )}
     </button>
   );
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import { SignInForm } from "@/components/forms&inputs/signInForm";
+import { SignInForm } from "@/components/forms&inputs/SignInForm";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useUserStore } from "@/lib/store/use-user-store";
@@ -83,7 +83,12 @@ export default function Login() {
             </div>
           </div>
         ) : (
-          <SignInForm />
+          <>
+            <p className="text-center">
+              Please create an account to access to the shop !
+            </p>
+            <SignInForm />
+          </>
         )}
       </div>
     </div>

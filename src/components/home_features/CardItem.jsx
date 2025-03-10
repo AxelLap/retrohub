@@ -7,7 +7,7 @@ import { User } from "lucide-react";
 import { AddToCartButton } from "../buttons/AddToCartBtn";
 import { Button } from "../ui/button";
 
-export const CardItem = ({ item }) => {
+export const CardItem = ({ item, userCard }) => {
   const price = item.price;
 
   return (
@@ -37,12 +37,19 @@ export const CardItem = ({ item }) => {
             <span className="text-sm text-center">{item.userId || "User"}</span>
           </div>
         </div>
-        <div className="w-2/3 flex flex-col gap-2">
-          <Button className="w-full hover:bg-white hover:text-black m-auto">
-            Description
-          </Button>
-          <AddToCartButton item={item} />
-        </div>
+        {userCard ? (
+          <div className="w-2/3 flex flex-col gap-2">
+            <Button variant="secondary">Modify item</Button>
+            <Button variant="destructive">Delete Item</Button>
+          </div>
+        ) : (
+          <div className="w-2/3 flex flex-col gap-2">
+            <Button className="w-full hover:bg-white hover:text-black m-auto">
+              Description
+            </Button>
+            <AddToCartButton item={item} />
+          </div>
+        )}
       </CardFooter>
     </Card>
   );

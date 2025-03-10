@@ -1,5 +1,5 @@
 import { supabase } from "../supabase";
-export const getItems = async (catFilter, constrFilter) => {
+export const getItems = async (catFilter, constrFilter, userFilter) => {
   let query = supabase.from("items").select("*");
 
   if (catFilter) {
@@ -7,6 +7,10 @@ export const getItems = async (catFilter, constrFilter) => {
   }
   if (constrFilter) {
     query = query.eq("constr", constrFilter);
+  }
+
+  if (userFilter) {
+    query = query.eq("userId", userFilter);
   }
 
   const { data: items, error } = await query;

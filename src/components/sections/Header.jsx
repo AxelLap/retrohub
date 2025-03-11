@@ -74,7 +74,6 @@ const UserHeader = () => {
   }, [userName]); // 👈 Exécute seulement si userName change
 
   if (!userData) return null;
-  console.log(userData);
 
   const userImage = userData[0].image;
 

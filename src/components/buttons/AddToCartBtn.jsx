@@ -1,7 +1,7 @@
 "use client";
 
 import { useCartStore } from "@/lib/store/use-cart-store";
-import { Trash2 } from "lucide-react";
+import { ShoppingCart, Trash2 } from "lucide-react";
 import { Button } from "../ui/button";
 
 export const AddToCartButton = ({ item }) => {
@@ -13,24 +13,23 @@ export const AddToCartButton = ({ item }) => {
   if (cartItems[itemId]) {
     return (
       <Button
-        className="flex flex-col w-full bg-white text-black hover:bg-white hover:text-black m-auto gap-2"
+        className="flex w-[30px] h-[30px] rounded-full  bg-white text-black hover:bg-white hover:text-black m-auto gap-2"
         onClick={() => {
           removeItem(item);
         }}
       >
         <Trash2 size={12} />
-        Remove from cart
       </Button>
     );
   } else {
     return (
       <Button
-        className="w-full hover:bg-white hover:text-black m-auto"
+        className="w-[30px] h-[30px] rounded-full  flex hover:bg-white hover:text-black m-auto"
         onClick={() => {
           addItem(item);
         }}
       >
-        Add to cart
+        <ShoppingCart />
       </Button>
     );
   }

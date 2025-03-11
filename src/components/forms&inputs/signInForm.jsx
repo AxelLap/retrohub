@@ -15,13 +15,28 @@ import { updateUser } from "@/lib/supabase/users/update-user";
 import { getId } from "@/lib/tools/get-id";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import useSWR from "swr";
 import { z } from "zod";
 import { AnimatedLoader } from "../animations/AnimatedLoader";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { ImageInput } from "./ImageInput";
+
+// 🆕 Fonction locale pour récupérer l'image sous forme de File
+const useFetchImageFile = (imageUrl, fileName) => {
+  return useSWR(
+    imageUrl,
+    async () => {
+      if (!imageUrl) return null;
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      return new File([blob], fileName, { type: blob.type });
+    },
+    { revalidateOnFocus: false }
+  );
+};
 
 const formSchema = z.object({
   userName: z.string().min(4).max(50),
@@ -29,36 +44,39 @@ const formSchema = z.object({
   userId: z.string(),
 });
 
-export const SignInForm = ({ defaultUser, setUserFormOpen }) => {
-  console.log(defaultUser);
+export const SignInForm = ({ defaultUser }) => {
   const [isLoading, setIsLoading] = useState(false);
   const login = useUserStore((s) => s.login);
   const closeModal = useDialogStore((s) => s.setIsDialogOpen);
+  const setUserFormOpen = useDialogStore((s) => s.setUserFormOpen);
   const router = useRouter();
+
+  // Utilisation de SWR pour récupérer l'image
+  const fileName = defaultUser.image.split("/").pop();
+  const { data: imageFile } = useFetchImageFile(defaultUser?.image, fileName);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
-
-    defaultValues: defaultUser
-      ? {
-          userName: defaultUser.userName,
-          image: defaultUser.image,
-          userId: defaultUser.userId,
-        }
-      : {
-          userName: "",
-          image: "",
-          userId: "",
-        },
+    defaultValues: {
+      userName: defaultUser?.userName || "",
+      image: imageFile || "",
+      userId: defaultUser?.userId || "",
+    },
   });
 
-  console.log("🔍 Form values à l'initialisation :", form.getValues());
+  // console.log("🔍 Form values à l'initialisation :", form.getValues());
 
   if (isLoading) {
     return <AnimatedLoader />;
   }
 
-  console.log("🛠 Form state errors:", form.formState.errors);
+  useEffect(() => {
+    if (imageFile) {
+      form.setValue("image", imageFile, { shouldValidate: true });
+    }
+  }, [imageFile, form]);
+
+  // console.log("🛠 Form state errors:", form.formState.errors);
 
   async function onSubmit(values) {
     console.log("submit");
@@ -83,7 +101,7 @@ export const SignInForm = ({ defaultUser, setUserFormOpen }) => {
         defaultUser.image
       );
       login(newUser.userName, newUser.image);
-      setUserFormOpen(false);
+      setUserFormOpen();
       closeModal();
     }
   }
@@ -122,7 +140,7 @@ export const SignInForm = ({ defaultUser, setUserFormOpen }) => {
                 <FormLabel>profile Picture</FormLabel>
                 <FormControl>
                   <ImageInput
-                    currentImage={field.value}
+                    currentImage={imageFile}
                     onChange={field.onChange}
                   />
                 </FormControl>

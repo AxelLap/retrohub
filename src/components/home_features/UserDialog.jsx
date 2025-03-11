@@ -9,7 +9,6 @@ import { useUserStore } from "@/lib/store/use-user-store";
 import { getUser } from "@/lib/supabase/users/get-user";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useState } from "react";
 import useSWR from "swr";
 import { UpdateUserBtn } from "../buttons/UpdateUserBtn";
 import { SignInForm } from "../forms&inputs/SignInForm";
@@ -17,11 +16,9 @@ import { Button, buttonVariants } from "../ui/button";
 import { ItemList } from "./ItemList";
 
 export const UserDialog = () => {
-  const { isDialogOpen, setIsDialogOpen } = useDialogStore();
+  const { isDialogOpen, setIsDialogOpen, userFormOpen, setUserFormOpen } =
+    useDialogStore();
   const userData = useUserStore();
-  console.log(userData);
-
-  const [userFormOpen, setUserFormOpen] = useState(false);
 
   const { data } = useSWR(["/"], async () => {
     const rawData = await getUser(userData.user);
@@ -30,7 +27,7 @@ export const UserDialog = () => {
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogContent className="h-[90%] w-[90%] rounded flex flex-col">
+      <DialogContent className="h-fit w-[90%] rounded flex flex-col">
         <DialogHeader>
           <div className="mb-6 relative   w-fit m-auto p-2">
             <img
@@ -38,13 +35,15 @@ export const UserDialog = () => {
               src={userData.userImage}
             />
             <DialogTitle className="text-black">{userData.user}</DialogTitle>
-            <UpdateUserBtn setUserFormOpen={setUserFormOpen} />
+            <UpdateUserBtn />
           </div>
-          <div className="h-fit w-2/3 bg-black rounded-md m-auto p-4">
-            <SignInForm defaultUser={data} setUserFormOpen={setUserFormOpen} />
-          </div>
-          <div className="h-[400px] overflow-scroll mb-6">
-            <p className="text-black">My items</p>
+          {userFormOpen ? (
+            <div className="h-fit w-2/3 bg-black rounded-md m-auto p-4">
+              <SignInForm defaultUser={data} />
+            </div>
+          ) : null}
+          <h3 className="text-black w-fit m-auto font-bold">My items</h3>
+          <div className="h-fit overflow-scroll mb-6">
             {userData?.user && (
               <ItemList userFilter={userData.user} userCard={true} />
             )}

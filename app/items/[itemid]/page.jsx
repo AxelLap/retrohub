@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/select";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -31,9 +31,12 @@ import { CATEGORIES } from "@/lib/data/category-data";
 import { CONDITIONS } from "@/lib/data/condition-data";
 import { CONSTR } from "@/lib/data/constructor-data";
 import { useUserStore } from "@/lib/store/use-user-store";
+import { getItem } from "@/lib/supabase/items/get-item";
 import { setItem } from "@/lib/supabase/items/set-item";
 import { getId } from "@/lib/tools/get-id";
+import { useFetchImageFile } from "@/lib/tools/useFetchImageFile";
 import Link from "next/link";
+import useSWR from "swr";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -47,9 +50,31 @@ const formSchema = z.object({
   userImage: z.string(),
 });
 
-export default function ItemIdPage() {
+export default function ItemIdPage({ params }) {
   const userName = useUserStore((s) => s.user);
-  const [isLoading, setIsLoading] = useState(false);
+
+  const [itemId, setItemId] = useState(null);
+
+  useEffect(() => {
+    async function resolveParams() {
+      const resolvedParams = await params;
+      setItemId(resolvedParams.itemid);
+    }
+    resolveParams();
+  }, [params]);
+
+  console.log(itemId);
+
+  const { data, isLoading } = useSWR(
+    itemId ? `/items/${itemId}` : null,
+    async () => {
+      if (itemId === "new") return null;
+
+      return getItem(itemId);
+    }
+  );
+
+  console.log({ data, isLoading, itemId });
 
   if (!userName) {
     return (
@@ -68,37 +93,62 @@ export default function ItemIdPage() {
     );
   }
 
-  if (isLoading) {
+  if (isLoading || itemId === null) {
     return <AnimatedLoader />;
   }
 
   return (
     <div className=" flex flex-col justify-center items-center w-full px-4 gap-3 ">
-      <AddNewItemForm />
+      <AddNewItemForm defaultItem={data} />
     </div>
   );
 }
 
-const AddNewItemForm = () => {
+const AddNewItemForm = ({ defaultItem }) => {
   const userId = useUserStore((s) => s.user);
   const userImage = useUserStore((s) => s.userImage);
-  console.log(userId);
+
+  const fileName = defaultItem.item[0].image.split("/").pop();
+  console.log(fileName);
+  const { data: imageFile } = useFetchImageFile(
+    defaultItem.item[0].image,
+    fileName
+  );
 
   const router = useRouter();
 
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      description: "",
-      category: "",
-      constr: "",
-      condition: "",
-      price: 0,
-      userId: "",
-      userImage: "",
-    },
+    defaultValues: defaultItem
+      ? {
+          name: defaultItem.item[0].name,
+          image: imageFile,
+          description: defaultItem.item[0].description,
+          category: defaultItem.item[0].category,
+          constr: defaultItem.item[0].constr,
+          condition: defaultItem.item[0].condition,
+          price: defaultItem.item[0].price / 100,
+          userId: defaultItem.item[0].userId,
+          userImage: defaultItem.item[0].userImage,
+        }
+      : {
+          name: "",
+          description: "",
+          category: "",
+          constr: "",
+          condition: "",
+          price: 0,
+          userId: "",
+          userImage: "",
+        },
   });
+
+  useEffect(() => {
+    if (imageFile) {
+      console.log(imageFile);
+      form.setValue("image", imageFile, { shouldValidate: true });
+    }
+  }, [imageFile, form]);
 
   function onSubmit(values) {
     const id = getId();
@@ -277,7 +327,10 @@ const AddNewItemForm = () => {
               <FormItem>
                 <FormLabel>Image</FormLabel>
                 <FormControl>
-                  <ImageInput image={field.value} onChange={field.onChange} />
+                  <ImageInput
+                    currentImage={imageFile}
+                    onChange={field.onChange}
+                  />
                 </FormControl>
               </FormItem>
             )}

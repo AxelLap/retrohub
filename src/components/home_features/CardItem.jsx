@@ -3,9 +3,11 @@
 import { Card, CardFooter } from "@/components/ui/card";
 
 import { formatPrice } from "@/lib/tools/formatPrice";
+import { cn } from "@/lib/utils";
 import { PenLine, Trash2, User } from "lucide-react";
+import Link from "next/link";
 import { AddToCartButton } from "../buttons/AddToCartBtn";
-import { Button } from "../ui/button";
+import { Button, buttonVariants } from "../ui/button";
 
 export const CardItem = ({ item, userCard }) => {
   const price = item.price;
@@ -23,12 +25,16 @@ export const CardItem = ({ item, userCard }) => {
         </span>
         {userCard ? (
           <div className="w-fit flex flex-col gap-2 absolute top-1 right-1">
-            <Button
-              className="w-[30px] h-[30px] rounded-full "
+            <Link
+              href={`/items/${item.id}`}
+              className={cn(
+                buttonVariants({ variant: "default", size: "default" }),
+                "hover:bg-white hover:text-black w-[30px] h-[30px] rounded-full "
+              )}
               variant="secondary"
             >
               <PenLine />
-            </Button>
+            </Link>
             <Button
               className="w-[30px] h-[30px] rounded-full "
               variant="destructive"

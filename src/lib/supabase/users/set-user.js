@@ -1,5 +1,5 @@
+import { uploadImage } from "../image/upload-image";
 import { supabase } from "../supabase";
-import { uploadImage } from "../upload-image";
 
 export const setUser = async (id, user) => {
   const imageUrl = await uploadImage(id, user);

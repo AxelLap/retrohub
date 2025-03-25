@@ -1,8 +1,7 @@
-import { getId } from "../tools/get-id.js";
-import { getS3Client } from "./auth.js";
-import { supabase } from "./supabase.js";
+import { getS3Client } from "../auth.js";
+import { supabase } from "../supabase.js";
 
-export const updateImage = async (item, oldImageUrl) => {
+export const uploadImage = async (id, item) => {
   console.log("uploadImage is called");
 
   if (!(item.image instanceof File)) {
@@ -21,15 +20,9 @@ export const updateImage = async (item, oldImageUrl) => {
 
   console.log("Utilisateur authentifié avec S3Client");
 
-  const imageToRemove = oldImageUrl.split("/").pop();
-
-  const id = getId();
-
   const fileExt = item.image.name.split(".").pop();
   const fileName = `${id}.${fileExt}`;
   console.log("File Name:", fileName);
-
-  await supabase.storage.from("items").remove([imageToRemove]);
 
   // Upload de l'image avec le client S3 correctement configuré
   const { data, error } = await supabase.storage

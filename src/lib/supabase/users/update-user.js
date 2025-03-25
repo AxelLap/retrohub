@@ -1,5 +1,5 @@
+import { updateImage } from "../image/update-image";
 import { supabase } from "../supabase";
-import { updateImage } from "../update-image";
 
 export const updateUser = async (id, user, oldImageUrl) => {
   const imageUrl = await updateImage(user, oldImageUrl);

@@ -9,7 +9,6 @@ export const getS3Client = async () => {
     return;
   }
   console.log("Session active:", session);
-  console.log("Token JWT utilisé:", session.session.access_token);
 
   return new S3Client({
     forcePathStyle: true,
@@ -18,7 +17,6 @@ export const getS3Client = async () => {
     credentials: {
       accessKeyId: process.env.NEXT_PUBLIC_ACCESS_KEY_ID,
       secretAccessKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-      sessionToken: session.session.access_token, // Ajoute le token utilisateur
     },
   });
 };

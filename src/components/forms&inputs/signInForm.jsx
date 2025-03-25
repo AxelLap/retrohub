@@ -15,28 +15,13 @@ import { updateUser } from "@/lib/supabase/users/update-user";
 import { getId } from "@/lib/tools/get-id";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import useSWR from "swr";
 import { z } from "zod";
 import { AnimatedLoader } from "../animations/AnimatedLoader";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { ImageInput } from "./ImageInput";
-
-// 🆕 Fonction locale pour récupérer l'image sous forme de File
-const useFetchImageFile = (imageUrl, fileName) => {
-  return useSWR(
-    imageUrl,
-    async () => {
-      if (!imageUrl) return null;
-      const response = await fetch(imageUrl);
-      const blob = await response.blob();
-      return new File([blob], fileName, { type: blob.type });
-    },
-    { revalidateOnFocus: false }
-  );
-};
 
 const formSchema = z.object({
   userName: z.string().min(4).max(50),
@@ -52,16 +37,27 @@ export const SignInForm = ({ defaultUser }) => {
   const router = useRouter();
 
   // Utilisation de SWR pour récupérer l'image
-  const fileName = defaultUser.image.split("/").pop();
-  const { data: imageFile } = useFetchImageFile(defaultUser?.image, fileName);
+  if (defaultUser) {
+    const fileName = defaultUser.image.split("/").pop();
+  }
+
+  const { data: imageFile } = defaultUser
+    ? useFetchImageFile(defaultUser?.image, fileName)
+    : {};
 
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      userName: defaultUser?.userName || "",
-      image: imageFile || "",
-      userId: defaultUser?.userId || "",
-    },
+    defaultValues: defaultUser
+      ? {
+          userName: defaultUser.userName,
+          image: imageFile,
+          userId: defaultUser.userId,
+        }
+      : {
+          userName: "",
+          image: "",
+          userId: "",
+        },
   });
 
   // console.log("🔍 Form values à l'initialisation :", form.getValues());
@@ -69,12 +65,6 @@ export const SignInForm = ({ defaultUser }) => {
   if (isLoading) {
     return <AnimatedLoader />;
   }
-
-  useEffect(() => {
-    if (imageFile) {
-      form.setValue("image", imageFile, { shouldValidate: true });
-    }
-  }, [imageFile, form]);
 
   // console.log("🛠 Form state errors:", form.formState.errors);
 

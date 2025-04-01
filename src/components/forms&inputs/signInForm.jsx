@@ -13,6 +13,7 @@ import { useUserStore } from "@/lib/store/use-user-store";
 import { setUser } from "@/lib/supabase/users/set-user";
 import { updateUser } from "@/lib/supabase/users/update-user";
 import { getId } from "@/lib/tools/get-id";
+import { useFetchImageFile } from "@/lib/tools/useFetchImageFile";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -69,7 +70,6 @@ export const SignInForm = ({ defaultUser }) => {
   // console.log("🛠 Form state errors:", form.formState.errors);
 
   async function onSubmit(values) {
-    console.log("submit");
     if (!defaultUser) {
       const id = getId();
       const newUser = await setUser(id, {

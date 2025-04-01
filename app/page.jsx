@@ -52,6 +52,7 @@ export default function Home() {
           <FilterList list={CONSTR} />
         </div>
       </div>
+
       <ItemList />
       {isDialogOpen ? <UserDialog /> : null}
     </div>

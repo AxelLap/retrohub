@@ -33,6 +33,7 @@ import { CONSTR } from "@/lib/data/constructor-data";
 import { useUserStore } from "@/lib/store/use-user-store";
 import { getItem } from "@/lib/supabase/items/get-item";
 import { setItem } from "@/lib/supabase/items/set-item";
+import { updateItem } from "@/lib/supabase/items/update-items";
 import { getId } from "@/lib/tools/get-id";
 import { useFetchImageFile } from "@/lib/tools/useFetchImageFile";
 import Link from "next/link";
@@ -62,8 +63,6 @@ export default function ItemIdPage({ params }) {
     }
     resolveParams();
   }, [params]);
-
-  console.log(itemId);
 
   const { data, isLoading } = useSWR(
     itemId ? `/items/${itemId}` : null,
@@ -99,21 +98,22 @@ export default function ItemIdPage({ params }) {
 
   return (
     <div className=" flex flex-col justify-center items-center w-full px-4 gap-3 ">
-      <AddNewItemForm defaultItem={data} />
+      <ItemForm defaultItem={data} />
     </div>
   );
 }
 
-const AddNewItemForm = ({ defaultItem }) => {
+const ItemForm = ({ defaultItem }) => {
   const userId = useUserStore((s) => s.user);
   const userImage = useUserStore((s) => s.userImage);
 
-  const fileName = defaultItem.item[0].image.split("/").pop();
-  console.log(fileName);
-  const { data: imageFile } = useFetchImageFile(
-    defaultItem.item[0].image,
-    fileName
-  );
+  const fileName = defaultItem
+    ? defaultItem.item[0].image.split("/").pop()
+    : null;
+
+  const { data: imageFile } = defaultItem
+    ? useFetchImageFile(defaultItem.item[0].image, fileName)
+    : { data: null };
 
   const router = useRouter();
 
@@ -145,14 +145,13 @@ const AddNewItemForm = ({ defaultItem }) => {
 
   useEffect(() => {
     if (imageFile) {
-      console.log(imageFile);
       form.setValue("image", imageFile, { shouldValidate: true });
     }
   }, [imageFile, form]);
 
-  function onSubmit(values) {
-    const id = getId();
-    setItem(id, {
+  function onSubmit(values, defaultItem) {
+    const id = defaultItem ? defaultItem.item[0].id : getId();
+    const item = {
       name: values.name,
       description: values.description,
       category: values.category,
@@ -162,7 +161,12 @@ const AddNewItemForm = ({ defaultItem }) => {
       image: values.image,
       userId: userId,
       userImage: userImage,
-    });
+    };
+    if (defaultItem) {
+      updateItem(id, item, defaultItem.item[0].image);
+    } else {
+      setItem(id, item);
+    }
     router.push("/");
   }
 
@@ -172,9 +176,8 @@ const AddNewItemForm = ({ defaultItem }) => {
       <Form {...form}>
         <form
           className="flex flex-col gap-4 m-auto w-full"
-          onSubmit={form.handleSubmit(
-            (values) => onSubmit(values),
-            (errors) => console.log("❌ Erreurs de validation :", errors)
+          onSubmit={form.handleSubmit((values) =>
+            onSubmit(values, defaultItem)
           )}
         >
           <FormField
@@ -336,7 +339,7 @@ const AddNewItemForm = ({ defaultItem }) => {
             )}
           />
           <Button className="w-full text-green-700" type="submit">
-            Add Item
+            {defaultItem ? "update item" : "Add Item"}
           </Button>
         </form>
       </Form>

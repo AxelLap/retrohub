@@ -10,13 +10,14 @@ import {
 
 import { useDialogStore } from "@/lib/store/use-user-dialog-store";
 import { useUserStore } from "@/lib/store/use-user-store";
+import { updateItems } from "@/lib/supabase/items/update-items";
 import { setUser } from "@/lib/supabase/users/set-user";
 import { updateUser } from "@/lib/supabase/users/update-user";
 import { getId } from "@/lib/tools/get-id";
 import { useFetchImageFile } from "@/lib/tools/useFetchImageFile";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { AnimatedLoader } from "../animations/AnimatedLoader";
@@ -38,13 +39,12 @@ export const SignInForm = ({ defaultUser }) => {
   const router = useRouter();
 
   // Utilisation de SWR pour récupérer l'image
-  if (defaultUser) {
-    const fileName = defaultUser.image.split("/").pop();
-  }
+  const fileName = defaultUser?.image?.split("/").pop();
 
   const { data: imageFile } = defaultUser
     ? useFetchImageFile(defaultUser?.image, fileName)
     : {};
+  console.log("🖼️ imageFile:", imageFile);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -90,11 +90,18 @@ export const SignInForm = ({ defaultUser }) => {
         },
         defaultUser.image
       );
+      updateItems(newUser, defaultUser.userName);
       login(newUser.userName, newUser.image);
       setUserFormOpen();
       closeModal();
     }
   }
+
+  useEffect(() => {
+    if (imageFile) {
+      form.setValue("image", imageFile);
+    }
+  }, [imageFile]);
 
   return (
     <div>
@@ -130,7 +137,11 @@ export const SignInForm = ({ defaultUser }) => {
                 <FormLabel>profile Picture</FormLabel>
                 <FormControl>
                   <ImageInput
-                    currentImage={imageFile}
+                    currentImage={
+                      imageFile instanceof File || imageFile instanceof Blob
+                        ? imageFile
+                        : null
+                    }
                     onChange={field.onChange}
                   />
                 </FormControl>

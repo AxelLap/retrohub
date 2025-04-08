@@ -33,11 +33,11 @@ import { CONSTR } from "@/lib/data/constructor-data";
 import { useUserStore } from "@/lib/store/use-user-store";
 import { getItem } from "@/lib/supabase/items/get-item";
 import { setItem } from "@/lib/supabase/items/set-item";
-import { updateItem } from "@/lib/supabase/items/update-items";
+import { updateItem } from "@/lib/supabase/items/update-item";
 import { getId } from "@/lib/tools/get-id";
 import { useFetchImageFile } from "@/lib/tools/useFetchImageFile";
 import Link from "next/link";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -167,6 +167,8 @@ const ItemForm = ({ defaultItem }) => {
     } else {
       setItem(id, item);
     }
+    mutate((key) => typeof key === "string" && key.startsWith("/items"));
+    mutate(`/items/${id}`);
     router.push("/");
   }
 

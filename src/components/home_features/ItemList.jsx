@@ -7,7 +7,11 @@ import { AnimatedLoader } from "../animations/AnimatedLoader";
 import { CardItem } from "./CardItem";
 
 export const ItemList = ({ userFilter, userCard }) => {
-  const { catFilter, constrFilter } = useFilterStore();
+  const catFilter = userFilter ? null : useFilterStore((s) => s.catFilter);
+
+  const constrFilter = userFilter
+    ? null
+    : useFilterStore((s) => s.constrFilter);
 
   const { data, isLoading } = useSWR(
     ["/", catFilter, constrFilter, userFilter],

@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import Login from "./login/page";
 
 import { FilterButton } from "@/components/buttons/FilterBtn";
-import { UserDialog } from "@/components/home_features/UserDialog";
+import { DeleteItemDialog } from "@/components/dialogs/DeleteItemDialog";
+import { UserDialog } from "@/components/dialogs/UserDialog";
 import { CATEGORIES } from "@/lib/data/category-data";
 import { CONSTR } from "@/lib/data/constructor-data";
 import { useFilterStore } from "@/lib/store/use-filter-store";
@@ -24,7 +25,7 @@ export default function Home() {
     catFilter,
   } = useFilterStore();
 
-  const { isDialogOpen } = useDialogStore();
+  const { isDialogOpen, isDeleteWarningOpen } = useDialogStore();
 
   if (!userName) {
     return <Login />;
@@ -54,7 +55,9 @@ export default function Home() {
       </div>
 
       <ItemList />
+
       {isDialogOpen ? <UserDialog /> : null}
+      {isDeleteWarningOpen ? <DeleteItemDialog /> : null}
     </div>
   );
 }

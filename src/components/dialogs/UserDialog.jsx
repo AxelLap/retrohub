@@ -12,12 +12,17 @@ import Link from "next/link";
 import useSWR from "swr";
 import { UpdateUserBtn } from "../buttons/UpdateUserBtn";
 import { SignInForm } from "../forms&inputs/SignInForm";
+import { ItemList } from "../home_features/ItemList";
 import { Button, buttonVariants } from "../ui/button";
-import { ItemList } from "./ItemList";
 
 export const UserDialog = () => {
-  const { isDialogOpen, setIsDialogOpen, userFormOpen, setUserFormOpen } =
-    useDialogStore();
+  const {
+    isDialogOpen,
+    setIsDialogOpen,
+    userFormOpen,
+    setUserFormOpen,
+    isDeleteWarningOpen,
+  } = useDialogStore();
   const userData = useUserStore();
 
   const { data } = useSWR(["/"], async () => {
@@ -26,8 +31,8 @@ export const UserDialog = () => {
   });
 
   return (
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogContent className="h-fit w-[90%] rounded flex flex-col">
+    <Dialog className="z-10" open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      <DialogContent className="h-fit w-[90%] rounded flex flex-col ">
         <DialogHeader>
           <div className="mb-6 relative   w-fit m-auto p-2">
             <img

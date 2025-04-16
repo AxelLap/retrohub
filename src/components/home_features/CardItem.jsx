@@ -2,6 +2,7 @@
 
 import { Card, CardFooter } from "@/components/ui/card";
 
+import { useDialogStore } from "@/lib/store/use-user-dialog-store";
 import { formatPrice } from "@/lib/tools/formatPrice";
 import { cn } from "@/lib/utils";
 import { PenLine, Trash2, User } from "lucide-react";
@@ -11,7 +12,7 @@ import { Button, buttonVariants } from "../ui/button";
 
 export const CardItem = ({ item, userCard }) => {
   const price = item.price;
-
+  const { setIsDeleteWarningOpen, setItemToDelete } = useDialogStore();
   return (
     <Card className="w-[48%] h-[250px]">
       <div className="flex w-full h-5/6 justify-center items-center relative">
@@ -38,6 +39,11 @@ export const CardItem = ({ item, userCard }) => {
             <Button
               className="w-[30px] h-[30px] rounded-full "
               variant="destructive"
+              onClick={() => {
+                console.log("Click depuis ItemCard");
+                setItemToDelete({ id: item.id, image: item.image });
+                setIsDeleteWarningOpen();
+              }}
             >
               <Trash2 />
             </Button>

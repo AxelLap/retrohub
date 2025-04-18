@@ -20,6 +20,10 @@ export const useCartStore = create(
         });
       },
 
+      resetItems: () => {
+        set({ items: {} });
+      },
+
       countItems: () => Object.keys(get().items).length,
 
       calculateCartPrice: () =>

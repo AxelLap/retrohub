@@ -1,5 +1,5 @@
 "use client";
-import { ItemList } from "@/components/home_features/ItemList";
+import { ItemList } from "@/components/features/ItemList";
 import { useUserStore } from "@/lib/store/use-user-store";
 import { useRouter } from "next/navigation";
 import Login from "./login/page";
@@ -7,6 +7,7 @@ import Login from "./login/page";
 import { FilterButton } from "@/components/buttons/FilterBtn";
 import { DeleteItemDialog } from "@/components/dialogs/DeleteItemDialog";
 import { UserDialog } from "@/components/dialogs/UserDialog";
+import { FooterCart } from "@/components/features/FooterCart";
 import { CATEGORIES } from "@/lib/data/category-data";
 import { CONSTR } from "@/lib/data/constructor-data";
 import { useFilterStore } from "@/lib/store/use-filter-store";
@@ -58,6 +59,7 @@ export default function Home() {
 
       {isDialogOpen ? <UserDialog /> : null}
       {isDeleteWarningOpen ? <DeleteItemDialog /> : null}
+      <FooterCart />
     </div>
   );
 }

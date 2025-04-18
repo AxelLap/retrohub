@@ -1,14 +1,12 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/lib/store/use-cart-store";
 import { useDialogStore } from "@/lib/store/use-user-dialog-store";
 import { useUserStore } from "@/lib/store/use-user-store";
 import { getUser } from "@/lib/supabase/users/get-user";
-import { formatPrice } from "@/lib/tools/formatPrice";
-import { ShoppingBasket } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { CartButton } from "../buttons/CartButton";
 
 export const Header = () => {
   const [isHydrated, setIsHydrated] = useState(false);
@@ -38,19 +36,7 @@ export const Header = () => {
       </div>
       <div className="flex h-full w-fit ml-auto gap-4 items-center">
         <UserHeader />
-        <Button
-          className="h-[60%] w-[60px] text-black flex flex-col p-0 gap-0 relative overflow-visible"
-          variant="outline"
-        >
-          {itemsCount ? (
-            <span className="h-[25px] w-[25px] flex justify-center items-center p-0 m-0 absolute -right-3 -top-3 bg-white rounded-full border border-black">
-              {itemsCount}
-            </span>
-          ) : null}
-
-          <ShoppingBasket size={18} />
-          <span>{formatPrice(cartPrice)}</span>
-        </Button>
+        <CartButton />
       </div>
     </header>
   );

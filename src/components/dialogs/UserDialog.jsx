@@ -11,8 +11,8 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import useSWR from "swr";
 import { UpdateUserBtn } from "../buttons/UpdateUserBtn";
+import { ItemList } from "../features/ItemList";
 import { SignInForm } from "../forms&inputs/SignInForm";
-import { ItemList } from "../home_features/ItemList";
 import { Button, buttonVariants } from "../ui/button";
 
 export const UserDialog = () => {

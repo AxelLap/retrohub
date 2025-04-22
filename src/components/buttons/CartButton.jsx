@@ -9,17 +9,17 @@ export const CartButton = () => {
   const cartPrice = useCartStore.getState().calculateCartPrice();
   return (
     <Button
-      className="h-[60%] w-[60px] text-black flex flex-col p-0 gap-0 relative overflow-visible"
+      className="h-[60%] w-[150px] text-black flex  p-0 gap-2 relative overflow-visible"
       variant="outline"
     >
       {itemsCount ? (
-        <span className="h-[25px] w-[25px] flex justify-center items-center p-0 m-0 absolute -right-3 -top-3 bg-white rounded-full border border-black">
+        <span className="h-[25px] w-[25px] flex justify-center items-center p-0 m-0 absolute -right-3 -top-3 bg-white rounded-full shadow-lg border border-gray-700">
           {itemsCount}
         </span>
       ) : null}
 
-      <ShoppingBasket size={18} />
-      <span>{formatPrice(cartPrice)}</span>
+      <ShoppingBasket className="font-bold" size={20} />
+      <span className="max-w-[80px] truncate">{formatPrice(cartPrice)}</span>
     </Button>
   );
 };
